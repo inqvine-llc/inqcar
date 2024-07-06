@@ -29,9 +29,13 @@ const Color kColorGrey900 = Color(0xFF212121);
 
 // Sizes
 const double kAppBarIconSize = 24.0;
+const double kAppStatusBarIconSize = 14.0;
 const double kAppIconSize = 42.0;
 const double kCollapsedHeight = 62.0;
 const double kTitleBarHeight = 42.0;
+
+// Animation Durations
+const Duration kDrawerAnimationDuration = Duration(milliseconds: 300);
 
 // Shadows
 const BoxShadow kDefaultShadow = BoxShadow(
@@ -133,6 +137,27 @@ const TextTheme kTextTheme = TextTheme(
     fontWeight: FontWeight.w400,
     letterSpacing: 0.4,
     height: 1.33,
+  ),
+  labelLarge: TextStyle(
+    fontFamily: 'Manrope',
+    fontSize: 16,
+    fontWeight: FontWeight.w500,
+    letterSpacing: 0.1,
+    height: 1.43,
+  ),
+  labelMedium: TextStyle(
+    fontFamily: 'Manrope',
+    fontSize: 14,
+    fontWeight: FontWeight.w500,
+    letterSpacing: 0.1,
+    height: 1.43,
+  ),
+  labelSmall: TextStyle(
+    fontFamily: 'Manrope',
+    fontSize: 12,
+    fontWeight: FontWeight.w500,
+    letterSpacing: 0.1,
+    height: 1.43,
   ),
 );
 

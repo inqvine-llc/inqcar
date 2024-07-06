@@ -8,10 +8,10 @@ import 'package:sprung/sprung.dart';
 
 class CarNavigationBar extends StatefulWidget {
   const CarNavigationBar({
-    Key? key,
+    super.key,
     required this.onApplicationTapped,
     this.currentApplication,
-  }) : super(key: key);
+  });
 
   final FutureOr<void> Function(CarApplication app) onApplicationTapped;
   final CarApplication? currentApplication;
@@ -135,6 +135,7 @@ class _CarNavigationBarState extends State<CarNavigationBar> with SingleTickerPr
         onAppLaunched: _launchAppFromLauncher,
       );
     }
+
     return Stack(
       children: [
         widget.currentApplication?.widget ?? const Placeholder(),
@@ -176,13 +177,9 @@ class _CarNavigationBarState extends State<CarNavigationBar> with SingleTickerPr
       onTap: () => _openApp(app),
       child: Tooltip(
         message: app.name,
-        child: Container(
+        child: SizedBox(
           width: kAppIconSize,
           height: kAppIconSize,
-          decoration: BoxDecoration(
-            color: kColorSurfaceLight,
-            borderRadius: BorderRadius.circular(kBorderRadiusSmall),
-          ),
           child: Stack(
             alignment: Alignment.center,
             children: [
@@ -193,10 +190,10 @@ class _CarNavigationBarState extends State<CarNavigationBar> with SingleTickerPr
               ),
               if (isRunning && app != CarApplication.apps)
                 Positioned(
-                  bottom: 5,
+                  bottom: 2,
                   child: Container(
-                    width: 8,
-                    height: 8,
+                    width: 4,
+                    height: 4,
                     decoration: const BoxDecoration(
                       color: kColorAccent,
                       shape: BoxShape.circle,

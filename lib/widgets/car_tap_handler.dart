@@ -6,8 +6,8 @@ class CarTapHandler extends StatefulWidget {
   const CarTapHandler({
     required this.child,
     required this.onTap,
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   final Widget child;
   final FutureOr<void> Function() onTap;

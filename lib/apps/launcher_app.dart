@@ -6,10 +6,11 @@ import 'package:inqcar/widgets/car_tap_handler.dart';
 class LauncherApp extends StatelessWidget {
   final Function(CarApplication) onAppLaunched;
 
-  const LauncherApp({Key? key, required this.onAppLaunched}) : super(key: key);
+  const LauncherApp({super.key, required this.onAppLaunched});
 
   @override
   Widget build(BuildContext context) {
+    final List<CarApplication> valuesExcludeApps = CarApplication.values.where((app) => app != CarApplication.apps).toList();
     return GridView.builder(
       padding: const EdgeInsets.all(kPaddingMedium),
       gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
@@ -18,9 +19,9 @@ class LauncherApp extends StatelessWidget {
         crossAxisSpacing: kPaddingMedium,
         mainAxisSpacing: kPaddingMedium,
       ),
-      itemCount: CarApplication.values.length - 1, // Exclude the 'apps' application
+      itemCount: valuesExcludeApps.length - 1, // Exclude the 'apps' application
       itemBuilder: (context, index) {
-        final app = CarApplication.values[index];
+        final app = valuesExcludeApps[index];
         if (app == CarApplication.apps) return const SizedBox.shrink();
         return CarTapHandler(
           onTap: () => onAppLaunched(app),
