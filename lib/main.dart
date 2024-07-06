@@ -13,6 +13,7 @@ class App extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       theme: AppTheme.current.toThemeData(),
+      debugShowCheckedModeBanner: false,
       home: const HomeScreen(),
     );
   }

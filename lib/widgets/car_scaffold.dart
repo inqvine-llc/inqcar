@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:inqcar/constants/design_constants.dart';
 import 'package:inqcar/models/car_application.dart';
 import 'package:inqcar/widgets/car_navigation_bar.dart';
+import 'package:inqcar/widgets/car_quick_settings.dart';
 import 'package:inqcar/widgets/car_status_bar.dart';
 import 'package:inqcar/widgets/car_tap_handler.dart';
 import 'package:sprung/sprung.dart';
@@ -110,33 +111,14 @@ class _CarScaffoldState extends State<CarScaffold> with SingleTickerProviderStat
                   left: 0,
                   right: 0,
                   height: screenHeight,
-                  child: _buildDrawer(),
+                  child: CarQuickSettingsDrawer(
+                    onClose: _toggleDrawer,
+                  ),
                 );
               },
             ),
           ],
         ),
-      ),
-    );
-  }
-
-  Widget _buildDrawer() {
-    return Container(
-      color: Colors.black.withOpacity(0.8),
-      child: Column(
-        children: [
-          const SizedBox(height: 40), // Space for status bar
-          const Text(
-            'Quick Settings',
-            style: TextStyle(color: Colors.white, fontSize: 24, fontWeight: FontWeight.bold),
-          ),
-          const SizedBox(height: 20),
-          // Add your quick settings here
-          ElevatedButton(
-            onPressed: _toggleDrawer,
-            child: const Text('Close Drawer'),
-          ),
-        ],
       ),
     );
   }
