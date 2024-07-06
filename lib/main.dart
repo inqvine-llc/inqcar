@@ -15,7 +15,7 @@ class App extends StatelessWidget {
       theme: ThemeData(
         textTheme: kTextTheme,
       ),
-      home: HomeScreen(),
+      home: const HomeScreen(),
     );
   }
 }

@@ -35,10 +35,12 @@ class CarWelcomeBanner extends StatelessWidget {
               style: theme.textTheme.headlineSmall,
             ),
             const SizedBox(height: 2.0),
-            Text('Switch profile',
-                style: theme.textTheme.labelLarge?.copyWith(
-                  color: theme.textTheme.labelLarge?.color?.withOpacity(0.6),
-                )),
+            Text(
+              'Switch profile',
+              style: theme.textTheme.labelLarge?.copyWith(
+                color: theme.textTheme.labelLarge?.color?.withOpacity(0.6),
+              ),
+            ),
           ],
         ),
       ],
