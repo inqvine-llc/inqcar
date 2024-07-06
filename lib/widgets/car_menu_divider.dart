@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:inqcar/constants/design_constant.dart';
+import 'package:inqcar/constants/design_constants.dart';
 import 'package:ionicons/ionicons.dart';
 
 class CarMenuDivider extends StatelessWidget {

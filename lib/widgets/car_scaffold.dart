@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:inqcar/constants/design_constant.dart';
+import 'package:inqcar/constants/design_constants.dart';
+import 'package:inqcar/models/car_application.dart';
 import 'package:inqcar/widgets/car_menu_divider.dart';
 import 'package:inqcar/widgets/car_navigation_bar.dart';
 import 'package:inqcar/widgets/car_tap_handler.dart';
@@ -18,15 +19,20 @@ class CarScaffold extends StatefulWidget {
 }
 
 class _CarScaffoldState extends State<CarScaffold> {
-  bool _isNavigationBarExpanded = false;
-  bool get isNavigationBarExpanded => _isNavigationBarExpanded;
-  set isNavigationBarExpanded(bool value) {
-    setState(() => _isNavigationBarExpanded = value);
+  CarApplication? _currentApplication;
+  CarApplication? get currentApplication => _currentApplication;
+  set currentApplication(CarApplication? value) {
+    if (value != null) {
+      _currentApplication = value;
+      if (mounted) {
+        setState(() {});
+      }
+    }
   }
 
   @override
   Widget build(BuildContext context) {
-    final bool canDisplayQuickActionsChevron = !isNavigationBarExpanded;
+    final bool canDisplayQuickActionsChevron = currentApplication == null;
 
     return Material(
       type: MaterialType.transparency,
@@ -51,8 +57,10 @@ class _CarScaffoldState extends State<CarScaffold> {
               left: kPaddingSmall,
               right: kPaddingSmall,
               child: CarNavigationBar(
-                isExpanded: _isNavigationBarExpanded,
-                onMenuTap: () => isNavigationBarExpanded = !isNavigationBarExpanded,
+                currentApplication: currentApplication,
+                onApplicationTapped: (CarApplication app) {
+                  currentApplication = app;
+                },
               ),
             ),
             AnimatedPositioned(

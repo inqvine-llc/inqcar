@@ -1,98 +1,247 @@
 import 'dart:async';
-
 import 'package:flutter/material.dart';
-import 'package:inqcar/constants/design_constant.dart';
+import 'package:inqcar/apps/launcher_app.dart';
+import 'package:inqcar/constants/design_constants.dart';
+import 'package:inqcar/models/car_application.dart';
 import 'package:inqcar/widgets/car_tap_handler.dart';
-import 'package:ionicons/ionicons.dart';
 import 'package:sprung/sprung.dart';
 
-class CarNavigationBar extends StatelessWidget {
+class CarNavigationBar extends StatefulWidget {
   const CarNavigationBar({
-    super.key,
-    required this.onMenuTap,
-    this.isExpanded = false,
-  });
+    Key? key,
+    required this.onApplicationTapped,
+    this.currentApplication,
+  }) : super(key: key);
 
-  final bool isExpanded;
+  final FutureOr<void> Function(CarApplication app) onApplicationTapped;
+  final CarApplication? currentApplication;
 
-  final FutureOr<void> Function() onMenuTap;
+  @override
+  State<CarNavigationBar> createState() => _CarNavigationBarState();
+}
+
+class _CarNavigationBarState extends State<CarNavigationBar> with SingleTickerProviderStateMixin {
+  late AnimationController _controller;
+  late Animation<double> _animation;
+  Map<CarApplication, bool> runningApps = {};
+  bool _isMinimized = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = AnimationController(
+      duration: const Duration(milliseconds: 500),
+      vsync: this,
+    );
+    _animation = CurvedAnimation(
+      parent: _controller,
+      curve: Curves.easeInOut,
+    );
+    for (var app in CarApplication.values) {
+      runningApps[app] = false;
+    }
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
-    final MediaQueryData mediaQuery = MediaQuery.of(context);
-    final double screenHeight = mediaQuery.size.height;
-    final expandedHeightExcludingPadding = screenHeight - kPaddingSmall * 2;
+    final bool hasOpenApplication = widget.currentApplication != null;
+
+    if (hasOpenApplication && !_isMinimized) {
+      _controller.forward();
+    } else {
+      _controller.reverse();
+    }
 
     return AnimatedContainer(
-      duration: const Duration(milliseconds: 1000),
+      duration: const Duration(milliseconds: 500),
       curve: Sprung.overDamped,
-      height: isExpanded ? expandedHeightExcludingPadding : kCollapsedHeight,
+      height: hasOpenApplication && !_isMinimized ? MediaQuery.of(context).size.height - kPaddingLarge * 2 : kCollapsedHeight,
       width: double.infinity,
       decoration: BoxDecoration(
-        color: kColorGrey350,
+        color: kColorBackground,
         borderRadius: BorderRadius.circular(kBorderRadiusSmall),
-        boxShadow: <BoxShadow>[
-          BoxShadow(
-            color: kColorGrey900.withOpacity(0.2),
-            offset: const Offset(0.0, 4.0),
-            blurRadius: 10.0,
+        boxShadow: const [kDefaultShadow],
+      ),
+      child: Column(
+        children: [
+          if (hasOpenApplication && !_isMinimized) buildTitleBar(),
+          Expanded(
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(kBorderRadiusSmall),
+              child: AnimatedSwitcher(
+                duration: const Duration(milliseconds: 500),
+                child: hasOpenApplication && !_isMinimized ? buildApplicationView() : buildNavigationRow(),
+              ),
+            ),
           ),
         ],
       ),
-      child: AnimatedSwitcher(
-        duration: const Duration(milliseconds: 1000),
-        child: !isExpanded
-            ? buildNavigationRow()
-            : Column(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: buildAppBarItems(),
-              ),
+    );
+  }
+
+  Widget buildTitleBar() {
+    return Container(
+      height: kTitleBarHeight,
+      padding: const EdgeInsets.symmetric(horizontal: kPaddingMedium),
+      decoration: const BoxDecoration(
+        color: kColorSurfaceLight,
+        borderRadius: BorderRadius.only(
+          topLeft: Radius.circular(kBorderRadiusSmall),
+          topRight: Radius.circular(kBorderRadiusSmall),
+        ),
       ),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Text(
+            widget.currentApplication!.name,
+            style: kTextTheme.titleMedium,
+          ),
+          Row(
+            children: [
+              CarTapHandler(
+                onTap: _minimizeApp,
+                child: const Icon(
+                  Icons.minimize,
+                  size: kAppBarIconSize,
+                  color: kColorGrey800,
+                ),
+              ),
+              const SizedBox(width: kPaddingSmall),
+              CarTapHandler(
+                onTap: _closeApp,
+                child: const Icon(
+                  Icons.close,
+                  size: kAppBarIconSize,
+                  color: kColorGrey800,
+                ),
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget buildApplicationView() {
+    if (widget.currentApplication == CarApplication.apps) {
+      return LauncherApp(
+        onAppLaunched: _launchAppFromLauncher,
+      );
+    }
+    return Stack(
+      children: [
+        widget.currentApplication?.widget ?? const Placeholder(),
+        IgnorePointer(
+          child: AnimatedBuilder(
+            animation: _animation,
+            builder: (context, child) {
+              return Opacity(
+                opacity: 1 - _animation.value,
+                child: Container(
+                  decoration: BoxDecoration(
+                    color: kColorBackground,
+                    borderRadius: BorderRadius.circular(kBorderRadiusSmall),
+                  ),
+                ),
+              );
+            },
+          ),
+        ),
+      ],
     );
   }
 
   Widget buildNavigationRow() {
+    final List<CarApplication> visibleApps = CarApplication.values.where((app) => app != CarApplication.apps).take(2).toList();
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-      children: buildAppBarItems(),
+      children: [
+        buildAppBarItem(visibleApps[0]),
+        buildAppBarItem(CarApplication.apps),
+        buildAppBarItem(visibleApps[1]),
+      ],
     );
   }
 
-  List<Widget> buildAppBarItems() {
-    return <Widget>[
-      buildAppBarItem(
-        icon: Ionicons.globe_outline,
-        tooltip: 'Browser',
-        onTap: () {},
-      ),
-      buildAppBarItem(
-        icon: Ionicons.grid_outline,
-        tooltip: 'Home',
-        onTap: onMenuTap,
-      ),
-      buildAppBarItem(
-        icon: Ionicons.logo_youtube,
-        tooltip: 'YouTube',
-        onTap: () {},
-      ),
-    ];
-  }
-
-  Widget buildAppBarItem({
-    required IconData icon,
-    required String tooltip,
-    required VoidCallback onTap,
-  }) {
+  Widget buildAppBarItem(CarApplication app) {
+    bool isRunning = runningApps[app] ?? false;
     return CarTapHandler(
-      onTap: onTap,
+      onTap: () => _openApp(app),
       child: Tooltip(
-        message: tooltip,
-        child: Icon(
-          icon,
-          size: kAppBarIconSize,
-          color: kColorGrey800,
+        message: app.name,
+        child: Container(
+          width: kAppIconSize,
+          height: kAppIconSize,
+          decoration: BoxDecoration(
+            color: kColorSurfaceLight,
+            borderRadius: BorderRadius.circular(kBorderRadiusSmall),
+          ),
+          child: Stack(
+            alignment: Alignment.center,
+            children: [
+              Icon(
+                app.icon,
+                size: kAppBarIconSize,
+                color: kColorGrey800,
+              ),
+              if (isRunning && app != CarApplication.apps)
+                Positioned(
+                  bottom: 5,
+                  child: Container(
+                    width: 8,
+                    height: 8,
+                    decoration: const BoxDecoration(
+                      color: kColorAccent,
+                      shape: BoxShape.circle,
+                    ),
+                  ),
+                ),
+            ],
+          ),
         ),
       ),
     );
+  }
+
+  void _openApp(CarApplication app) {
+    setState(() {
+      if (app != CarApplication.apps) {
+        runningApps[app] = true;
+      }
+      _isMinimized = false;
+    });
+    widget.onApplicationTapped(app);
+  }
+
+  void _launchAppFromLauncher(CarApplication app) {
+    setState(() {
+      runningApps[app] = true;
+      runningApps[CarApplication.apps] = false;
+      _isMinimized = false;
+    });
+    widget.onApplicationTapped(app);
+  }
+
+  void _minimizeApp() {
+    setState(() {
+      _isMinimized = true;
+    });
+  }
+
+  void _closeApp() {
+    if (widget.currentApplication != null) {
+      setState(() {
+        runningApps[widget.currentApplication!] = false;
+        _isMinimized = true; // This line ensures the bar is minimized after closing
+      });
+      widget.onApplicationTapped(widget.currentApplication!);
+    }
   }
 }

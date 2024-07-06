@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:inqcar/constants/design_constant.dart';
+import 'package:inqcar/constants/design_constants.dart';
 import 'package:inqcar/screens/home_screen.dart';
 
 void main() {
@@ -12,9 +12,7 @@ class App extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      theme: ThemeData(
-        textTheme: kTextTheme,
-      ),
+      theme: kThemeData,
       home: const HomeScreen(),
     );
   }
