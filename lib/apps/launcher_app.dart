@@ -12,12 +12,12 @@ class LauncherApp extends StatelessWidget {
   Widget build(BuildContext context) {
     final List<CarApplication> valuesExcludeApps = CarApplication.values.where((app) => app != CarApplication.apps).toList();
     return GridView.builder(
-      padding: const EdgeInsets.all(kPaddingMedium),
-      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+      padding: EdgeInsets.all(AppTheme.current.paddingMedium),
+      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
         crossAxisCount: 4,
         childAspectRatio: 1,
-        crossAxisSpacing: kPaddingMedium,
-        mainAxisSpacing: kPaddingMedium,
+        crossAxisSpacing: AppTheme.current.paddingMedium,
+        mainAxisSpacing: AppTheme.current.paddingMedium,
       ),
       itemCount: valuesExcludeApps.length - 1, // Exclude the 'apps' application
       itemBuilder: (context, index) {
@@ -30,13 +30,13 @@ class LauncherApp extends StatelessWidget {
             children: [
               Icon(
                 app.icon,
-                size: kAppBarIconSize * 1.5,
-                color: kColorGrey800,
+                size: 24,
+                color: AppTheme.current.greyPalette[8],
               ),
-              const SizedBox(height: kPaddingSmall),
+              SizedBox(height: AppTheme.current.paddingSmall),
               Text(
                 app.name,
-                style: kTextTheme.bodySmall,
+                style: AppTheme.current.textTheme.labelSmall?.copyWith(color: AppTheme.current.greyPalette[8]),
                 textAlign: TextAlign.center,
               ),
             ],

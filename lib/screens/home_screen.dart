@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:inqcar/widgets/car_scaffold.dart';
-import 'package:inqcar/widgets/car_welcome_banner.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
@@ -10,9 +9,7 @@ class HomeScreen extends StatelessWidget {
     return const CarScaffold(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          CarWelcomeBanner(),
-        ],
+        children: [],
       ),
     );
   }

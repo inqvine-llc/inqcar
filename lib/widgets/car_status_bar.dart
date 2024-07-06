@@ -19,11 +19,13 @@ class CarStatusBar extends StatelessWidget {
   final Widget Function(BuildContext, String)? batteryBuilder;
   final Widget Function(BuildContext, String)? networkBuilder;
 
+  static const double kAppStatusBarHeight = 42;
+
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: kTitleBarHeight,
-      color: kColorGrey300.withOpacity(0.5),
+      height: kAppStatusBarHeight,
+      color: AppTheme.current.greyPalette[3].withOpacity(0.5),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
@@ -66,14 +68,14 @@ class CarStatusBar extends StatelessWidget {
     return IgnorePointer(
       ignoring: true,
       child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: kPaddingSmall),
+        padding: EdgeInsets.symmetric(horizontal: AppTheme.current.paddingSmall),
         child: Row(
           children: [
-            Icon(icon, color: kColorGrey900, size: kAppStatusBarIconSize),
-            const SizedBox(width: kPaddingXSmall),
+            Icon(icon, color: AppTheme.current.greyPalette[9], size: 16),
+            SizedBox(width: AppTheme.current.paddingXSmall),
             Text(
               text,
-              style: kTextTheme.labelSmall?.copyWith(color: kColorGrey900),
+              style: AppTheme.current.textTheme.labelSmall?.copyWith(color: AppTheme.current.greyPalette[9]),
             ),
           ],
         ),

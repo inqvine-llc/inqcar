@@ -3,6 +3,7 @@ import 'package:inqcar/constants/design_constants.dart';
 import 'package:inqcar/models/car_application.dart';
 import 'package:inqcar/widgets/car_navigation_bar.dart';
 import 'package:inqcar/widgets/car_status_bar.dart';
+import 'package:inqcar/widgets/car_tap_handler.dart';
 import 'package:sprung/sprung.dart';
 
 class CarScaffold extends StatefulWidget {
@@ -36,7 +37,7 @@ class _CarScaffoldState extends State<CarScaffold> with SingleTickerProviderStat
   @override
   void initState() {
     super.initState();
-    _drawerAnimationController = AnimationController(vsync: this, duration: kDrawerAnimationDuration);
+    _drawerAnimationController = AnimationController(vsync: this, duration: const Duration(milliseconds: 600));
     _drawerAnimation = Tween<double>(begin: 0, end: 1).animate(
       CurvedAnimation(parent: _drawerAnimationController, curve: Sprung.overDamped),
     );
@@ -68,11 +69,11 @@ class _CarScaffoldState extends State<CarScaffold> with SingleTickerProviderStat
       child: Container(
         height: double.infinity,
         width: double.infinity,
-        decoration: const BoxDecoration(
+        decoration: BoxDecoration(
           gradient: RadialGradient(
             colors: <Color>[
-              kColorGrey300,
-              kColorGrey500,
+              AppTheme.current.greyPalette[3],
+              AppTheme.current.greyPalette[5],
             ],
             center: Alignment.center,
             radius: 1.5,
@@ -85,19 +86,15 @@ class _CarScaffoldState extends State<CarScaffold> with SingleTickerProviderStat
               top: 0,
               left: 0,
               right: 0,
-              child: GestureDetector(
-                onVerticalDragUpdate: (details) {
-                  if (details.primaryDelta! > 0) {
-                    _toggleDrawer();
-                  }
-                },
+              child: CarTapHandler(
+                onTap: _toggleDrawer,
                 child: const CarStatusBar(),
               ),
             ),
             Positioned(
-              bottom: kPaddingSmall,
-              left: kPaddingSmall,
-              right: kPaddingSmall,
+              bottom: AppTheme.current.paddingSmall,
+              left: AppTheme.current.paddingSmall,
+              right: AppTheme.current.paddingSmall,
               child: CarNavigationBar(
                 currentApplication: currentApplication,
                 onApplicationTapped: (CarApplication app) {

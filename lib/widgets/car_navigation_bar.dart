@@ -26,6 +26,11 @@ class _CarNavigationBarState extends State<CarNavigationBar> with SingleTickerPr
   Map<CarApplication, bool> runningApps = {};
   bool _isMinimized = false;
 
+  static const double kCollapsedHeight = 60;
+  static const double kTitleBarHeight = 42;
+  static const double kAppIconSize = 32;
+  static const double kAppBarIconSize = 24;
+
   @override
   void initState() {
     super.initState();
@@ -61,19 +66,19 @@ class _CarNavigationBarState extends State<CarNavigationBar> with SingleTickerPr
     return AnimatedContainer(
       duration: const Duration(milliseconds: 500),
       curve: Sprung.overDamped,
-      height: hasOpenApplication && !_isMinimized ? MediaQuery.of(context).size.height - kPaddingLarge * 2 : kCollapsedHeight,
+      height: hasOpenApplication && !_isMinimized ? MediaQuery.of(context).size.height - AppTheme.current.paddingLarge * 2 : kCollapsedHeight,
       width: double.infinity,
       decoration: BoxDecoration(
-        color: kColorBackground,
-        borderRadius: BorderRadius.circular(kBorderRadiusSmall),
-        boxShadow: const [kDefaultShadow],
+        color: AppTheme.current.colorBackground,
+        borderRadius: BorderRadius.circular(AppTheme.current.borderRadiusSmall),
+        boxShadow: [AppTheme.current.defaultShadow],
       ),
       child: Column(
         children: [
           if (hasOpenApplication && !_isMinimized) buildTitleBar(),
           Expanded(
             child: ClipRRect(
-              borderRadius: BorderRadius.circular(kBorderRadiusSmall),
+              borderRadius: BorderRadius.circular(AppTheme.current.paddingSmall),
               child: AnimatedSwitcher(
                 duration: const Duration(milliseconds: 500),
                 child: hasOpenApplication && !_isMinimized ? buildApplicationView() : buildNavigationRow(),
@@ -88,12 +93,12 @@ class _CarNavigationBarState extends State<CarNavigationBar> with SingleTickerPr
   Widget buildTitleBar() {
     return Container(
       height: kTitleBarHeight,
-      padding: const EdgeInsets.symmetric(horizontal: kPaddingMedium),
-      decoration: const BoxDecoration(
-        color: kColorSurfaceLight,
+      padding: EdgeInsets.symmetric(horizontal: AppTheme.current.paddingMedium),
+      decoration: BoxDecoration(
+        color: AppTheme.current.colorSurfaceLight,
         borderRadius: BorderRadius.only(
-          topLeft: Radius.circular(kBorderRadiusSmall),
-          topRight: Radius.circular(kBorderRadiusSmall),
+          topLeft: Radius.circular(AppTheme.current.borderRadiusSmall),
+          topRight: Radius.circular(AppTheme.current.borderRadiusSmall),
         ),
       ),
       child: Row(
@@ -101,25 +106,25 @@ class _CarNavigationBarState extends State<CarNavigationBar> with SingleTickerPr
         children: [
           Text(
             widget.currentApplication!.name,
-            style: kTextTheme.titleMedium,
+            style: AppTheme.current.textTheme.titleMedium,
           ),
           Row(
             children: [
               CarTapHandler(
                 onTap: _minimizeApp,
-                child: const Icon(
+                child: Icon(
                   Icons.minimize,
                   size: kAppBarIconSize,
-                  color: kColorGrey800,
+                  color: AppTheme.current.greyPalette[8],
                 ),
               ),
-              const SizedBox(width: kPaddingSmall),
+              SizedBox(width: AppTheme.current.paddingSmall),
               CarTapHandler(
                 onTap: _closeApp,
-                child: const Icon(
+                child: Icon(
                   Icons.close,
                   size: kAppBarIconSize,
-                  color: kColorGrey800,
+                  color: AppTheme.current.greyPalette[8],
                 ),
               ),
             ],
@@ -147,8 +152,8 @@ class _CarNavigationBarState extends State<CarNavigationBar> with SingleTickerPr
                 opacity: 1 - _animation.value,
                 child: Container(
                   decoration: BoxDecoration(
-                    color: kColorBackground,
-                    borderRadius: BorderRadius.circular(kBorderRadiusSmall),
+                    color: AppTheme.current.colorBackground,
+                    borderRadius: BorderRadius.circular(AppTheme.current.borderRadiusSmall),
                   ),
                 ),
               );
@@ -186,7 +191,7 @@ class _CarNavigationBarState extends State<CarNavigationBar> with SingleTickerPr
               Icon(
                 app.icon,
                 size: kAppBarIconSize,
-                color: kColorGrey800,
+                color: AppTheme.current.greyPalette[8],
               ),
               if (isRunning && app != CarApplication.apps)
                 Positioned(
@@ -194,8 +199,8 @@ class _CarNavigationBarState extends State<CarNavigationBar> with SingleTickerPr
                   child: Container(
                     width: 4,
                     height: 4,
-                    decoration: const BoxDecoration(
-                      color: kColorAccent,
+                    decoration: BoxDecoration(
+                      color: AppTheme.current.colorAccent,
                       shape: BoxShape.circle,
                     ),
                   ),

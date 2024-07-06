@@ -12,7 +12,7 @@ class App extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      theme: kThemeData,
+      theme: AppTheme.current.toThemeData(),
       home: const HomeScreen(),
     );
   }
