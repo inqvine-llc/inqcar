@@ -20,6 +20,9 @@ const Color kColorGrey700 = Color(0xFF616161);
 const Color kColorGrey800 = Color(0xFF424242);
 const Color kColorGrey900 = Color(0xFF212121);
 
+const double kAppBarIconSize = 24.0;
+const double kCollapsedHeight = 52.0;
+
 const TextTheme kTextTheme = TextTheme(
   displayLarge: TextStyle(
     fontFamily: 'Manrope',

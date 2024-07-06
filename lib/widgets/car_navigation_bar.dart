@@ -17,9 +17,6 @@ class CarNavigationBar extends StatelessWidget {
 
   final FutureOr<void> Function() onMenuTap;
 
-  static const double kCollapsedHeight = 72.0;
-  static const double kAppBarIconSize = 32.0;
-
   @override
   Widget build(BuildContext context) {
     final MediaQueryData mediaQuery = MediaQuery.of(context);

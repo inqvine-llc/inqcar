@@ -56,7 +56,7 @@ class _CarScaffoldState extends State<CarScaffold> {
               ),
             ),
             AnimatedPositioned(
-              top: canDisplayQuickActionsChevron ? kPaddingSmall : -CarMenuDivider.kDividerHeight * 2,
+              top: canDisplayQuickActionsChevron ? kPaddingSmall : -kAppBarIconSize * 2,
               left: kPaddingNone,
               right: kPaddingNone,
               duration: const Duration(milliseconds: 1000),
