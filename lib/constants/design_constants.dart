@@ -28,11 +28,10 @@ const Color kColorGrey800 = Color(0xFF424242);
 const Color kColorGrey900 = Color(0xFF212121);
 
 // Sizes
-const double kAppBarIconSize = 32.0;
-const double kAppIconSize = 80.0;
-const double kCollapsedHeight = 100.0;
-const double kExpandedHeight = 620.0;
-const double kTitleBarHeight = 60.0;
+const double kAppBarIconSize = 24.0;
+const double kAppIconSize = 42.0;
+const double kCollapsedHeight = 62.0;
+const double kTitleBarHeight = 42.0;
 
 // Shadows
 const BoxShadow kDefaultShadow = BoxShadow(
